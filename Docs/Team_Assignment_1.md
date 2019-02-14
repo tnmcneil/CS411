@@ -1,13 +1,10 @@
 # CS411 Group 4 - Section A3 : Team Assignment 1 Project Proposal
 ### Team Members
 
-#Yahia Bakour
-
-#Michael Hendrick
-
-#Theresa Mcneil
-
-#Zhipeng (Eric) Wang 
+* Yahia Bakour
+* Michael Hendrick
+* Theresa Mcneil
+* Zhipeng (Eric) Wang 
 
 ## Ideas
 

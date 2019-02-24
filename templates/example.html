@@ -1,0 +1,7 @@
+<!doctype html>
+<title>Welcome to our 411 project</title>
+{% if name %}
+  <h1>We've passed in the following data from the backend to the front end: {{ name }}</h1>
+{% else %}
+  <h1>We didn't pass along any data :(</h1>
+{% endif %}

@@ -44,7 +44,7 @@ def landing_page():
     return render_template('landing_page.html', example_data=data)
 
 #An example of a route that changes based on the input of the endpoint. Notice how '<name>' is a variable.
-#http://127.0.0.1:5000/mike will return a UI different than http://127.0.0.1:5000/tessa, for instance.
+#http://127.0.0.1:5000/example/mike will return a UI different than http://127.0.0.1:5000/example/tessa, for instance.
 @app.route("/example/<name>")
 def example(name=None,length=None):
     return render_template('example.html', name=name, length=len(name))

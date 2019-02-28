@@ -4,7 +4,7 @@ SET UP INFO:
 2. CD into the CS411 directory on your machine via the command line
 3. Run 'pip3 install Flask'
 4. Run 'pip3 install pymongo'
-5. Run 'export FLASK_APP=main.py'
+5. Run 'export FLASK_APP=main.py' or For windows: $env:FLASK_APP = "main.py" , or set FLASK_APP=main.py
 6. Run 'python3 -m flask run'
 7. Go to http://127.0.0.1:5000/ (or http://localhost:5000/) in your browser
 8. Do ‘CTRL+C’ in your terminal to kill the instance.
@@ -35,6 +35,7 @@ app = Flask(__name__)
 #***CODE FOR ROUTING***
 
 #Every route is declared with an app.route call
+
 @app.route("/")
 def landing_page():
     data = "Hello World"
@@ -45,5 +46,5 @@ def landing_page():
 #An example of a route that changes based on the input of the endpoint. Notice how '<name>' is a variable.
 #http://127.0.0.1:5000/mike will return a UI different than http://127.0.0.1:5000/tessa, for instance.
 @app.route("/example/<name>")
-def example(name=None):
-    return render_template('example.html', name=name)
+def example(name=None,length=None):
+    return render_template('example.html', name=name, length=len(name))

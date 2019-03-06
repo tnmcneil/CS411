@@ -1,0 +1,10 @@
+<!doctype html>
+<title>Welcome to our places API tester</title>
+<body>
+{% if place %}
+  <h1> Here are restaraunts near your area: {{place}} </h1>
+  <pre>{{ data }}</pre>
+  {% else %}
+  <h1>You haven't picked a place yet, please enter one below</h1>
+{% endif %}
+</body>

@@ -1,7 +1,7 @@
 <!doctype html>
 <title>Welcome to our 411 project</title>
 <body>
-{% if name %}
+{% if name is not none %}
   <h1>We've passed in the following data from the backend to the front end: {{ name }}</h1>
   <p> Your name has {{length}} characters</p>
 {% else %}

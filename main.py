@@ -63,7 +63,7 @@ def requestare():
     return render_template('place_request.html')
 
 
-#This once gets routed to from the above one
+#This once gets routed to from the above one, DONT ACCESS THIS DIRECTLY
 @app.route("/places/", methods = ['GET','POST'])
 def place():
     data = "NO DATA"

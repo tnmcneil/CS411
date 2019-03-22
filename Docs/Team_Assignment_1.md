@@ -4,8 +4,7 @@
 * Yahia Bakour
 * Michael Hendrick
 * Theresa Mcneil
-* Zhipeng (Eric) Wang 
-
+* Zhipeng Wang 
 ## Ideas
 
 ### WhereWeGoin.io

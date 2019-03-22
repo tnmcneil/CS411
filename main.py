@@ -15,6 +15,7 @@ SET UP INFO:
 from flask import Flask , request,jsonify
 from flask import render_template
 from APIs import Google_Places_Api
+from APIs import config
 import json
 import pymongo
 app = Flask(__name__)
@@ -57,7 +58,7 @@ def example(name=None):
     return render_template('example.html', name=name, length=length)
 
 
-#Go to THIS URL To insert the area you want to go to 
+#Go to THIS URL To insert the area you want to go to
 @app.route("/requestarea/")
 def requestare():
     return render_template('place_request.html')
@@ -69,7 +70,16 @@ def place():
     data = "NO DATA"
     if request.method == 'POST':
         place = request.form['location']
-        print(place)
         data= Google_Places_Api.get_restaurants_near_place(place,'Restaurants')
+        data=data["results"]
+        names = []
+        address = []
+        pics = []
+        for d in data:
+            names.append(d["name"])
+            address.append(d["formatted_address"])
+            temp = d["photos"][0]["photo_reference"]
+            temp = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + temp + "&key=" + config.api_key_google_places
+            pics.append(temp)
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
-    return render_template('places.html', place=place, data=response)
+    return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics)

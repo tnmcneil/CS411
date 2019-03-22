@@ -1,6 +1,6 @@
 '''
 
-Downloaded from: https://github.com/googlemaps/google-maps-services-python/tree/master/googlemaps 
+Downloaded from: https://github.com/googlemaps/google-maps-services-python/tree/master/googlemaps
 -- USE THE FOLLOWING COMMAND pip install googlemaps
 '''
 
@@ -22,6 +22,5 @@ def get_restaurants_near_place(location,typeofplace):
 
     # Request directions via public transit
     result = gmaps.places(typeofplace,location=[lat,lng],radius=2000)
-    
-    return result
 
+    return result

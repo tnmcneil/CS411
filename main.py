@@ -12,7 +12,7 @@ SET UP INFO:
 '''
 
 
-from flask import Flask , request,jsonify
+from flask import Flask , request,jsonify, redirect
 from flask import render_template
 from APIs import Google_Places_Api
 from APIs import config
@@ -82,4 +82,6 @@ def place():
             temp = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + temp + "&key=" + config.api_key_google_places
             pics.append(temp)
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
-    return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics)
+        return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics)
+    else:
+        return redirect("/requestarea/")

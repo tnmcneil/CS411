@@ -23,16 +23,16 @@ app = Flask(__name__)
 #***CODE FOR MONGO***
 
 #We'll move DB_URL to a secret file once we set it up so we don't push sensitive info to github.
-#DB_URL = "MONGO URL HERE"
+
 
 #Connects program to Mongo instance
-#myclient = pymongo.MongoClient(DB_URL)
+myclient = pymongo.MongoClient(config.DB_URL)
 
 #The string in brackets represents the database we want to access. If it doesn't exist, it'll make one.
-#mydb = myclient["test_database"]
+mydb = myclient["cs411"]
 
 #The string in brackets represents the collection we want to access. If it doesn't exist, it'll make one.
-#mycol = mydb["test_collection"]
+mycol = mydb["test_collection"]
 
 #inset, query, find, and code for other interactions can be found here: https://www.w3schools.com/python/python_mongodb_insert.asp
 
@@ -61,6 +61,11 @@ def example(name=None):
 #Go to THIS URL To insert the area you want to go to
 @app.route("/requestarea/")
 def requestare():
+    #Example of insert
+    toInsert = {"hit": "this_page"}
+    response = mycol.insert_one(toInsert)
+    print(response)
+    #end example
     return render_template('place_request.html')
 
 

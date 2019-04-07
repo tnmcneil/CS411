@@ -161,4 +161,4 @@ def place():
 def logout():
     logout_user()
     form = RegForm()
-    return render_template('home.html', form=form)
+    return render_template('place_request.html', form=form)

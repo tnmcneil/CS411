@@ -12,33 +12,98 @@ SET UP INFO:
 '''
 
 
-from flask import Flask , request,jsonify, redirect
-from flask import render_template
-from APIs import Google_Places_Api
-from APIs import config
+from flask import Flask , request,jsonify, redirect,render_template
+from APIs import Google_Places_Api, config
+from flask_mongoengine import MongoEngine, Document
+from flask_wtf import FlaskForm, CsrfProtect
+from wtforms import StringField, PasswordField
+from wtforms.validators import Email, Length, InputRequired
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import json
 import pymongo
 app = Flask(__name__)
 
-#***CODE FOR MONGO***
-
-#We'll move DB_URL to a secret file once we set it up so we don't push sensitive info to github.
 
 
-#Connects program to Mongo instance
-myclient = pymongo.MongoClient(config.DB_URL)
+csrf = CsrfProtect()
 
-#The string in brackets represents the database we want to access. If it doesn't exist, it'll make one.
-mydb = myclient["cs411"]
+csrf.init_app(app)
 
-#The string in brackets represents the collection we want to access. If it doesn't exist, it'll make one.
-mycol = mydb["test_collection"]
+app.config['MONGODB_SETTINGS'] = {
+    'db': 'testWinWin',
+    'host': config.DB_URL
+}
 
-#inset, query, find, and code for other interactions can be found here: https://www.w3schools.com/python/python_mongodb_insert.asp
+db = MongoEngine(app)
+app.config['SECRET_KEY'] = '_no_one_cared_til_i_put_on_the_mask_'
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+class User(UserMixin, db.Document):
+    meta = {'collection': 'accounts'}
+    username = db.StringField()
+    name = db.StringField()
+    email = db.StringField(max_length=30)
+    password = db.StringField()
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.objects(pk=user_id).first()
+
+class RegForm(FlaskForm):
+    username = StringField('username',  validators=[InputRequired(), Length(max=30)])
+    name = StringField('name',  validators=[InputRequired(), Length(max=30)])
+    email = StringField('email',  validators=[InputRequired(), Email(message='Invalid email'), Length(max=30)])
+    password = PasswordField('password', validators=[InputRequired(), Length(min=0, max=20)])
+
+class LogInForm(FlaskForm):
+    username = StringField('username',  validators=[InputRequired(), Length(max=30)])
+    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=20)])
+
 
 #***CODE FOR ROUTING***
 
 #Every route is declared with an app.route call
+
+@app.route("/testLogin", methods=['GET', 'POST'])
+def home():
+    form = LogInForm()
+    if request.method == 'GET':
+        if current_user.is_authenticated == True:
+            return render_template('place_request.html',user=current_user)
+        return render_template('testLogin.html', form=form)
+    else:
+        check_user = User.objects(username=form.username.data).first()
+        if check_user:
+            if check_password_hash(check_user['password'], form.password.data):
+                login_user(check_user)
+                return render_template('place_request.html', user=current_user)
+            return render_template('testLogin.html', form=form, error="Incorrect password!")
+        return render_template('testLogin.html', form=form, error="Username doesn't exist!")
+
+@app.route("/testSignup", methods=['GET', 'POST'])
+def signup():
+    form = RegForm()
+    if request.method == 'GET':
+        return render_template('testSignup.html', form=form)
+    else:
+        if form.validate_on_submit():
+            existing_email = User.objects(email=form.email.data).first()
+            existing_user = User.objects(username=form.username.data).first()
+            if existing_email is not None:
+                return render_template('testSignup.html', form=form, error="Email taken")  # We should return a pop up error msg as well account taken
+            elif existing_user is not None:
+                return render_template('testSignup.html', form=form, error="Username taken")
+            else:
+                hashpass = generate_password_hash(form.password.data, method='sha256')
+                newUser = User(username=form.username.data, name=form.name.data, email=form.email.data,
+                               password=hashpass).save()
+                login_user(newUser)
+                return render_template('place_request.html')
+        return render_template('testSignup.html', form=form) #We should return a pop up error msg as well bad input
+
 @app.route("/")
 def landing_page():
     data = "Hello World, SUP"

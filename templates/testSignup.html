@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$( document ).ready(function() {
+
+    $('#registerForm').submit(function (event) {
+        if($('#username').val() == ''){
+            alert( "Username required." );
+            event.preventDefault();
+        } else if($('#email').val() == ''){
+            alert( "Email required." );
+            event.preventDefault();
+        } else if($('#name').val() == '') {
+            alert( "Name required." );
+            event.preventDefault();
+        } else if($('#password').val() == ''){
+            alert( "Password is required and must be 8 characters." );
+            event.preventDefault();
+        }
+         else if($('#password').val() != $('#confirmPassword').val()){
+            alert( "Passwords must match!!" );
+            event.preventDefault();
+        } else{
+            $('#registerForm').submit();
+        }
+    });
+});
+</script>
+
+<head>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+  <title>Create Account</title>
+</head>
+
+<body>
+  <div class="main">
+      {% if error %}
+          <p class="error" align="center">{{ error }}</p>
+      {% else %}
+          <p class="sign" align="center">Create Account</p>
+      {% endif %}
+    <form class="form1" action="/testSignup" method="post" id="registerForm">
+        {{ form.username(class_="input", placeholder="Username", id="username")}}
+        {{ form.email(class_="input", placeholder="Email", id="email")}}
+        {{ form.name(class_="input", placeholder="Name", id="name")}}
+        {{ form.password(class_="input", placeholder="Password", id="password")}}
+        {{ form.hidden_tag() }}
+      <input id="confirmPassword" class="input" type="password" align="center" placeholder="Confirm Password">
+      <br>
+      <br>
+      <input type="submit" class="submit" align="center" value="Submit">
+    </form>
+    </div>
+
+</body>
+
+</html>

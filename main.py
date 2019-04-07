@@ -22,9 +22,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import json
 import pymongo
+
 app = Flask(__name__)
-
-
 
 csrf = CsrfProtect()
 
@@ -34,6 +33,9 @@ app.config['MONGODB_SETTINGS'] = {
     'db': 'testWinWin',
     'host': config.DB_URL
 }
+myclient = pymongo.MongoClient(config.DB_URL)
+mydb = myclient["cs411"]
+mycol = mydb["test_collection"]
 
 db = MongoEngine(app)
 app.config['SECRET_KEY'] = '_no_one_cared_til_i_put_on_the_mask_'
@@ -106,10 +108,10 @@ def signup():
 
 @app.route("/")
 def landing_page():
-    data = "Hello World, SUP"
-    #render_template looks for a matching file in templates folder to render, and passes the data along that a user specifys
-    #Flask by default uses Jinga2 templating. It's essientially html with if statements. You can find more info here: http://jinja.pocoo.org/docs/2.10/
-    return render_template('landing_page.html', example_data=data)
+    form = LogInForm()
+    if current_user.is_authenticated == True:
+        return render_template('place_request.html',user=current_user)
+    return render_template('testLogin.html', form=form)
 
 #An example of a route that changes based on the input of the endpoint. Notice how '<name>' is a variable.
 #http://127.0.0.1:5000/example/mike will return a UI different than http://127.0.0.1:5000/example/tessa, for instance.
@@ -126,12 +128,16 @@ def example(name=None):
 #Go to THIS URL To insert the area you want to go to
 @app.route("/requestarea/")
 def requestare():
-    #Example of insert
-    toInsert = {"hit": "this_page"}
-    response = mycol.insert_one(toInsert)
-    print(response)
-    #end example
-    return render_template('place_request.html')
+    form = LogInForm()
+    if current_user.is_authenticated == True:
+        toInsert = {"hit": "REQUEST_AREA"}
+        response = mycol.insert_one(toInsert)
+        print(response)
+        #end example
+        return render_template('place_request.html')
+    else:
+        return render_template('testLogin.html', form=form)
+
 
 
 #This once gets routed to from the above one, DONT ACCESS THIS DIRECTLY

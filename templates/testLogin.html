@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$( document ).ready(function() {
+
+    $('#loginForm').submit(function (event) {
+        if($('#username').val() == ''){
+            alert( "Username required." );
+            event.preventDefault();
+        } else if($('#password').val() == ''){
+            alert( "Password is required" );
+            event.preventDefault();
+        } else{
+            $('#loginForm').submit();
+        }
+    });
+});
+</script>
+
+<head>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+  <title>Sign in</title>
+</head>
+
+<body>
+  <div class="main">
+      {% if error %}
+          <p class="error" align="center">{{ error }}</p>
+      {% else %}
+          <p class="sign" align="center">Welcome to WinWin!</p>
+      {% endif %}
+    <form class="form1" action="/testLogin" method="post" id="loginForm">
+        {{ form.username(class_="un", placeholder="Username", id="username")}}
+        {{ form.password(class_="pass", placeholder="Password", id="password")}}
+        {{ form.hidden_tag() }}
+
+      <input type="submit" class="submit" align="center" value="Log In">
+      <a href="./signup" class="submit" align="center">Register<a>
+      <p class="forgot" align="center">
+        <a href="./resetpassword">Forgot Password?</p>
+     </form>
+
+    </div>
+
+</body>
+
+</html>

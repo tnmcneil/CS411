@@ -62,9 +62,9 @@ def example(name=None):
 @app.route("/requestarea/")
 def requestare():
     #Example of insert
-    toInsert = {"hit": "this_page"}
-    response = mycol.insert_one(toInsert)
-    print(response)
+    toInsert = {"hit": "requestArea"}
+    #response = mycol.insert_one(toInsert)
+    #print(response)
     #end example
     return render_template('place_request.html')
 

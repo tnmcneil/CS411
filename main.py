@@ -155,3 +155,10 @@ def place():
         return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics)
     else:
         return redirect("/requestarea/")
+
+@app.route('/logout', methods = ['GET'])
+@login_required
+def logout():
+    logout_user()
+    form = RegForm()
+    return render_template('home.html', form=form)

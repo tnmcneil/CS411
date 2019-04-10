@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
 $( document ).ready(function() {
@@ -18,34 +17,57 @@ $( document ).ready(function() {
 });
 </script>
 
-<head>
-  <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-  <title>Sign in</title>
-</head>
+{% block style %}
+<style>
+input[type=text],input[type=password] {
+  width: 25%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 3px solid #ccc;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
+}
 
-<body>
+input[type=text]:focus,input[type=password]:focus {
+  border: 3px solid #555;
+}
+</style>
+{% endblock %}
+
+{% block head %}
+  {% block title %}
+  <title>
+      Sign In
+  </title>
+  {% endblock %}
+  {% endblock %}
+
+
+  {% block body %}
   <div class="main">
       {% if error %}
-          <p class="error" align="center">{{ error }}</p>
+        <br />
+        <h2 style="color:white;" class="sign" align="center">Login to start</h2>
+        <p style="color:white;" class="error" align="center">{{ error }}</p>
       {% else %}
-          <p class="sign" align="center">Welcome to WinWin!</p>
+        <br />
+        <h2 style="color:white;" class="sign" align="center">Login to start</h2>
       {% endif %}
-    <form class="form1" action="/testLogin" method="post" id="loginForm">
+    <form style="text-align:center;" action="/testLogin" method="post">
         {{ form.username(class_="un", placeholder="Username", id="username")}}
+        <br />
         {{ form.password(class_="pass", placeholder="Password", id="password")}}
         {{ form.hidden_tag() }}
-
-      <input type="submit" class="submit" align="center" value="Log In">
-      <a href="./signup" class="submit" align="center">Register<a>
+        <br/> <br /> 
+      <input type="submit" class="FORMSUBMIT" align="center" value="Log In">
+      <a href="./signup" class="FORMSUBMIT" align="center">Register<a>
       <p class="forgot" align="center">
-        <a href="./resetpassword">Forgot Password?</p>
+        <a href="./resetpassword">Forgot Password?</a></p>
      </form>
-
+     <button onclick="location.href = 'http://127.0.0.1:5000/Googlelogin';"> Login with Google</button>
     </div>
 
-</body>
+    {% endblock %}
 
-</html>

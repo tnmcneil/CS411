@@ -158,8 +158,8 @@ def testLogin():
             if check_password_hash(check_user['password'], form.password.data):
                 login_user(check_user)
                 return render_template('place_request.html',form =form_Request)
-            return render_template('testLogin.html', form=form, error="Incorrect password!")
-        return render_template('testLogin.html', form=form, error="Username doesn't exist!")
+            return render_template('testLogin.html', form=form, error="Incorrect password!",Client_id_url=config.Google_Client_ID)
+        return render_template('testLogin.html', form=form, error="Username doesn't exist!",Client_id_url=config.Google_Client_ID)
 
 @app.route("/testSignup", methods=['GET', 'POST'])
 def signup():
@@ -236,7 +236,10 @@ def place():
 @login_required
 def logout():
     logout_user()
-    del session['access_token']
+    try:
+        del session['access_token']
+    except Exception:
+        pass
     form = RegForm()
     login_form = RequestForm()
     return redirect("/")

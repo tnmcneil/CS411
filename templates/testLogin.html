@@ -62,11 +62,12 @@ input[type=text]:focus,input[type=password]:focus {
         {{ form.hidden_tag() }}
         <br/> <br /> 
       <input type="submit" class="FORMSUBMIT" align="center" value="Log In">
-      <a href="./signup" class="FORMSUBMIT" align="center">Register<a>
+      <a href="./testSignup" class="FORMSUBMIT" align="center">Register<a>
       <p class="forgot" align="center">
         <a href="./resetpassword">Forgot Password?</a></p>
-        <button align="center" class="FORMSUBMIT" onclick="window.href = 'http://127.0.0.1:5000/Googlelogin';"> Login with Google</button>
-     </form>
+      </form>
+
+        <button align="center" class="FORMSUBMIT"> <a href="./Googlelogin">Login with Google</a></button>
     </div>
 
     {% endblock %}

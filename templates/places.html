@@ -4,41 +4,30 @@
 </br></br>
 {% block style %}
 <style>
-
-ul {
-  list-style-type: none;
-  width: 500px;
+.scrolling-wrapper {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
 }
+.card {
+    display: inline-block;
+    color:white;
+    background-color: black;
+  }
 
-
-li p {
-  font: 200 12px/1.5 Georgia, Times New Roman, serif;
-}
-
-li {
-  padding: 10px;
-}
-
-li:hover {
-  background: #eee;
-  cursor: pointer;
-}
 </style>
 {% endblock %}
 
-<div >
-  <div>
-      <div>
-          <ul>
+<h2> Restaraunts : </h2>
+<div class = "Restaraunts">
+  <div class="scrolling-wrapper">
               {% for item in pics %}
-              <li>
-                  <img src= "{{ item }}" >
+              <div class="card">
+                  <img src= "{{ item }}" width="auto" height="300px" >
                   <h3>{{ names[loop.index0] }}</h3>
                   <p> {{ address[loop.index0] }}</p>
-              </li>
-                  {% endfor %}
-          </ul>
-        </div>
+              </div>
+              {% endfor %}
     </div>
 </div>
 

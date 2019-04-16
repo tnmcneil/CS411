@@ -138,7 +138,7 @@ def login():
 def authorized(resp):
     access_token = resp['access_token']
     session['access_token'] = access_token, ''
-    return redirect(url_for('requestare'))
+    return redirect(url_for('requestarea'))
  
 @google.tokengetter
 def get_access_token():

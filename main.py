@@ -31,9 +31,6 @@ import pymongo
 import pymongo
 app = Flask(__name__)
 
-
-
-
 csrf = CSRFProtect()
 
 csrf.init_app(app)
@@ -105,7 +102,7 @@ def landing_page():
     form_Request = RequestForm()
     access_token = session.get('access_token')
     if access_token is None:
-        return redirect(url_for('testLogin'))
+        return redirect(url_for('requestare'))
     access_token = access_token[0]
     headers = {'Authorization': 'OAuth '+access_token}
     req = URLLib_request.Request('https://www.googleapis.com/oauth2/v1/userinfo',headers= headers)
@@ -116,9 +113,11 @@ def landing_page():
         if e.code == 401:
             # Unauthorized - bad token
             session.pop('access_token', None)
-            return redirect(url_for('login'))
+            return redirect(url_for('testLogin'))
+        print(res.read())
         return res.read()
-    return res.read()
+    print(res.read())
+    return redirect(url_for('testLogin'))
 
     #OLD CODE
     if current_user.is_authenticated == True or session.get('access_token') is not None:
@@ -150,7 +149,7 @@ def testLogin():
     form_Request = RequestForm()
     if request.method == 'GET':
         if current_user.is_authenticated == True:
-            return render_template('place_request.html',form =form_Request)
+            return redirect(url_for('requestare'))
         return render_template('testLogin.html', form=form)
     else:
         check_user = User.objects(username=form.username.data).first()

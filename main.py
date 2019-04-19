@@ -163,6 +163,7 @@ def testLogin():
 @app.route("/testSignup", methods=['GET', 'POST'])
 def signup():
     form = RegForm()
+    form_Request =  RequestForm()
     if request.method == 'GET':
         return render_template('testSignup.html', form=form)
     else:
@@ -178,7 +179,8 @@ def signup():
                 newUser = User(username=form.username.data, name=form.name.data, email=form.email.data,
                                password=hashpass).save()
                 login_user(newUser)
-                return render_template('place_request.html')
+                print("LOGGED IN")
+                return render_template('place_request.html',form =form_Request)
         return render_template('testSignup.html', form=form) #We should return a pop up error msg as well bad input
 
 

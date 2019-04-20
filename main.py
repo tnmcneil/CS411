@@ -157,7 +157,7 @@ def testLogin():
         if check_user:
             if check_password_hash(check_user['password'], form.password.data):
                 login_user(check_user)
-                return render_template('place_request.html',form =form_Request)
+                return redirect(url_for('requestare'))
             return render_template('testLogin.html', form=form, error="Incorrect password!",Client_id_url=config.Google_Client_ID)
         return render_template('testLogin.html', form=form, error="Username doesn't exist!",Client_id_url=config.Google_Client_ID)
 
@@ -203,6 +203,7 @@ def requestare():
     form = RequestForm()
     if current_user.is_authenticated == True or session.get('access_token') is not None:
         #Example of insert
+        status = True
         toInsert = {"hit": "requestArea"}
         #response = mycol.insert_one(toInsert)
         #print(response)
@@ -216,7 +217,7 @@ def requestare():
         except Exception as e:
             name = None
 
-        return render_template('place_request.html',form =form, name=name)
+        return render_template('place_request.html',form =form, name=name,loggedin=status)
     else:
         return redirect("/testLogin")
 
@@ -225,6 +226,7 @@ def requestare():
 def place():
     data = "NO DATA"
     if request.method == 'POST':
+        status = True
         print(request.form)
         place = request.form['area']
         data= Google_Places_Api.get_restaurants_near_place(place,'Restaurants')
@@ -241,7 +243,7 @@ def place():
             pics.append([temp,count])
             count += 1
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
-        return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics)
+        return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics,loggedin=status)
     else:
         return redirect("/requestarea/")
 

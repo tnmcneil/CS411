@@ -216,12 +216,12 @@ def requestare():
         except Exception as e:
             name = None
 
-        return render_template('place_request.html',form =form, name=name)
+        return render_template('place_request.html', form=form, name=name)
     else:
         return redirect("/testLogin")
 
 #This once gets routed to from the above one, DONT ACCESS THIS DIRECTLY
-@app.route("/places/", methods = ['GET','POST'])
+@app.route("/places/", methods=['GET','POST'])
 def place():
     data = "NO DATA"
     if request.method == 'POST':
@@ -229,7 +229,7 @@ def place():
         place = request.form['area']
         # data= Google_Places_Api.get_restaurants_near_place(place,'Restaurants')
         data = Google_Places_Api.get_museums(place)
-        data=data["results"]
+        data = data["results"]
         names = []
         address = []
         pics = []
@@ -240,8 +240,10 @@ def place():
                 temp = d["photos"][0]["photo_reference"]
                 temp = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + temp + "&key=" + config.api_key_google_places
                 pics.append(temp)
-        response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
-        return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics)
+            else:
+                pics.append("https://safekozani.gr/images/coming-soon.png")
+        response = json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))
+        return render_template('places.html', place=place, data=response, names=names, address=address, pics=pics)
     else:
         return redirect("/requestarea/")
 

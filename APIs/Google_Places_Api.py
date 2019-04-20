@@ -10,6 +10,9 @@ from . import config
 
 APIKEY = config.api_key_google_places
 
+FOOD = ["restaurant", "bakery", "cafe", "meal_delivery", "meal_takeaway"]
+
+
 def get_coords(loc):
     gmaps = googlemaps.Client(key=APIKEY)
     geocode_result = gmaps.geocode(loc)
@@ -33,6 +36,12 @@ def get_restaurants_near_place(location,typeofplace):
     result = gmaps.places(typeofplace,location=[lat,lng],radius=2000)
 
     return result
+
+def get_food(loc):
+    gmaps = googlemaps.Client(key=APIKEY)
+    lat, lng = get_coords(loc)
+
+
 
 def get_museums(loc):
     gmaps = googlemaps.Client(key=APIKEY)

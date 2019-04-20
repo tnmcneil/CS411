@@ -210,9 +210,9 @@ def requestare():
         name = None
         try:
             if(current_user.name.count(" ")>=1):
-                name = current_user.name
-            else:
                 name = current_user.name.split(" ")[0]
+            else:
+                name = current_user.name
         except Exception as e:
             name = None
 

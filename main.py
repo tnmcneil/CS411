@@ -109,6 +109,7 @@ def landing_page():
     try:
         opener = URLLib_request.build_opener()
         res = opener.open(req)
+        print(res)
     except error.URLError as e:
         if e.code == 401:
             # Unauthorized - bad token
@@ -206,7 +207,13 @@ def requestare():
         #response = mycol.insert_one(toInsert)
         #print(response)
         #end example
-        return render_template('place_request.html',form =form)
+        name = None
+        try:
+            name = current_user.name.split(" ")[0]
+        except Exception as e:
+            name = None
+
+        return render_template('place_request.html',form =form, name=name)
     else:
         return redirect("/testLogin")
 
@@ -241,6 +248,4 @@ def logout():
         del session['access_token']
     except Exception:
         pass
-    form = RegForm()
-    login_form = RequestForm()
-    return redirect("/")
+    return redirect("/testLogin")

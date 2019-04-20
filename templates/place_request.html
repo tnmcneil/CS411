@@ -5,7 +5,12 @@
 <br /> <br /> <br /> <br />
   <div style="text-align: center;">
     <form  action = "http://127.0.0.1:5000/places/" method = "POST">
-        <h2 style="color:white;">Where ya headin bud? <br/> <br />
+      {% if name %}
+      <h2 style="color:white;">So, {{ name }} where ya goin? <br/> <br />
+        {% else %}
+      <h2 style="color:white;">Where ya headin bud? <br/> <br />
+        {% endif %}
+
           {{ form.area(class_="", placeholder="Location")}}
           </h2>
           {{ form.csrf_token }}

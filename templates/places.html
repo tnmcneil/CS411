@@ -37,25 +37,29 @@
 </style>
 {% endblock %}
 
-<h2> Restaraunts : </h2>
-<div class = "Restaraunts">
+</div>
+
+{% for item in pics %}
+<h2> Restaurants : </h2>
+<div class = "Restaurants">
   <div class="scrolling-wrapper" id="style-1">
-              {% for item in pics %}
+              {% set outer_loop = loop %}
+              {% for pic in item %}
               <div class="card">
-                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#myModal{{item[1]}}">
-                  <img src= "{{ item[0] }}" width="auto" height="300px" >
-                  <h3>{{ names[loop.index0] }}</h3>
-                  <p> {{ address[loop.index0] }}</p>
+                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#myModal{{pic[1]}}">
+                  <img src= "{{ pic[0] }}" width="auto" height="300px" >
+                  <h3>{{ names[outer_loop.index - 1][loop.index0] }}</h3>
+                  <p> {{ address[outer_loop.index - 1][loop.index0] }}</p>
                 </button>
 
               </div>
 
               <!-- The Modal -->
-                <div class="modal" id="myModal{{item[1]}}">
+                <div class="modal" id="myModal{{pic[1]}}">
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title" style="color:black;">{{ names[loop.index0] }}</h4>
+                        <h4 class="modal-title" style="color:black;">{{ names[outer_loop.index - 1][loop.index0] }}</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                       </div>
                       <div class="modal-body">
@@ -67,9 +71,12 @@
                     </div>
                   </div>
                 </div>
-              {% endfor %}
+        {% endfor %}
+
     </div>
-</div>
+
+  {% endfor %}
+
 
 <span style="color:white;">
 {% if place %}

@@ -120,13 +120,6 @@ def landing_page():
     print(res.read())
     return redirect(url_for('testLogin'))
 
-    #OLD CODE
-    if current_user.is_authenticated == True or session.get('access_token') is not None:
-        data = "Hello World, SUP"
-        return render_template('place_request.html',form =form_Request)
-    else:
-        return render_template('testLogin.html', form=form_Login)
-
 
 @app.route('/Googlelogin')
 def login():
@@ -229,20 +222,28 @@ def place():
         status = True
         print(request.form)
         place = request.form['area']
-        data= Google_Places_Api.get_restaurants_near_place(place,'Restaurants')
-        data=data["results"]
-        names = []
-        address = []
-        pics = []
+        names = [[],[]]
+        address = [[],[]]
+        pics = [[],[]]
+        categories = ["Restaurants", "Museums"]
         count = 0
-        for d in data:
-            names.append(d["name"])
-            address.append(d["formatted_address"])
-            temp = d["photos"][0]["photo_reference"]
-            temp = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + temp + "&key=" + config.api_key_google_places
-            pics.append([temp,count])
-            count += 1
+        for i in range(len(categories)):
+            data = Google_Places_Api.get_restaurants_near_place(place, categories[i])
+            data = data["results"]
+            for d in data:
+                names[i].append(d["name"])
+                address[i].append(d["formatted_address"])
+                if "photos" in d:
+                    temp = d["photos"][0]["photo_reference"]
+                    temp = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + temp + "&key=" + config.api_key_google_places
+                    pics[i].append([temp,count])
+                else:
+                    pics[i].append(["https://safekozani.gr/images/coming-soon.png",count])
+                count += 1
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
+        print(pics)
+        print(pics[0])
+        print(pics[0][0])
         return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics,loggedin=status)
     else:
         return redirect("/requestarea/")

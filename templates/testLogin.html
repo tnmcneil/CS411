@@ -33,6 +33,7 @@ input[type=text],input[type=password] {
 input[type=text]:focus,input[type=password]:focus {
   border: 3px solid #555;
 }
+
 </style>
 {% endblock %}
 
@@ -60,15 +61,20 @@ input[type=text]:focus,input[type=password]:focus {
         <br />
         {{ form.password(class_="pass", placeholder="Password", id="password")}}
         {{ form.hidden_tag() }}
-        <br/> <br /> 
+        <br/> <br />
       <input type="submit" class="FORMSUBMIT" align="center" value="Log In">
-      <a href="./testSignup" class="FORMSUBMIT" align="center">Register<a>
+      <a href="./Googlelogin" class="FORMSUBMIT" align="center"><i class="fa fa-google w3-hover-opacity"></i><a>
+        <br><a href="./testSignup" class="FORMSUBMIT" align="center">Register<a>
+
+
       <p class="forgot" align="center">
         <a href="./resetpassword">Forgot Password?</a></p>
       </form>
 
-        <button align="center" class="FORMSUBMIT"> <a href="./Googlelogin">Login with Google</a></button>
+        <!-- <button align="center" id="customBtn" class="FORMSUBMIT"> <a href="./Googlelogin">Login with Google</a></button> -->
+
+
+
     </div>
 
     {% endblock %}
-

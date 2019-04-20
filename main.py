@@ -139,7 +139,7 @@ def authorized(resp):
     access_token = resp['access_token']
     session['access_token'] = access_token, ''
     return redirect(url_for('requestare'))
- 
+
 @google.tokengetter
 def get_access_token():
     return session.get('access_token')
@@ -232,12 +232,14 @@ def place():
         names = []
         address = []
         pics = []
+        count = 0
         for d in data:
             names.append(d["name"])
             address.append(d["formatted_address"])
             temp = d["photos"][0]["photo_reference"]
             temp = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + temp + "&key=" + config.api_key_google_places
-            pics.append(temp)
+            pics.append([temp,count])
+            count += 1
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
         return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics)
     else:

@@ -13,7 +13,7 @@ SET UP INFO:
 
 
 from flask import Flask , request,jsonify, redirect,render_template, url_for, session
-from APIs import Google_Places_Api, config
+from APIs import Google_Places_Api, config, Yelp_API
 from flask_mongoengine import MongoEngine, Document
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
@@ -234,6 +234,7 @@ def place():
         names = []
         address = []
         pics = []
+        all_reviews = []
         count = 0
         for d in data:
             names.append(d["name"])
@@ -242,8 +243,20 @@ def place():
             temp = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + temp + "&key=" + config.api_key_google_places
             pics.append([temp,count])
             count += 1
+            for_yelp = [x.strip() for x in d["formatted_address"].split(",")]
+            current_reviews = []
+            try:
+                test_yelp = Yelp_API.get_reviews_of_business(d["name"],for_yelp[0],for_yelp[1],for_yelp[2].split(" ")[0],"US")
+                # print(test_yelp)
+                for x in test_yelp["reviews"]:
+                    # print(x)
+                    current_reviews.append([x["rating"],x["text"],x["url"]])
+            except:
+                print("no reviews")
+            all_reviews.append(current_reviews)
+        # print(all_reviews)
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
-        return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics,loggedin=status)
+        return render_template('places.html', all_reviews=all_reviews, place=place, data=response, names = names, address = address, pics = pics,loggedin=status)
     else:
         return redirect("/requestarea/")
 

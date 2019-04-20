@@ -222,12 +222,11 @@ def place():
         status = True
         print(request.form)
         place = request.form['area']
-# <<<<<<< HEAD
-        names = [[],[]]
-        address = [[],[]]
-        pics = [[],[]]
-        all_reviews = [[],[]]
-        categories = ["Restaurants", "Museums"]
+        names = [[],[],[]]
+        address = [[],[],[]]
+        pics = [[],[],[]]
+        all_reviews = [[],[],[]]
+        categories = ["Restaurants", "Bars", "Museums"]
         count = 0
         for i in range(len(categories)):
             data = Google_Places_Api.get_restaurants_near_place(place, categories[i])

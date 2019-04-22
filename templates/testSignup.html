@@ -33,6 +33,12 @@ $( document ).ready(function() {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
   <title>Create Account</title>
+    <style>
+    .form1{
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+    </style>
   {% endblock %}
 
   {% block body %}
@@ -43,10 +49,14 @@ $( document ).ready(function() {
           <p class="sign" align="center">Create Account</p>
       {% endif %}
     <form class="form1" action="/testSignup" method="post" id="registerForm">
-        {{ form.username(class_="input", placeholder="Username", id="username")}}
-        {{ form.email(class_="input", placeholder="Email", id="email")}}
-        {{ form.name(class_="input", placeholder="Name", id="name")}}
-        {{ form.password(class_="input", placeholder="Password", id="password")}}
+        Username:{{ form.username(class_="input", placeholder="Username", id="username")}}
+        <br>
+        Email:{{ form.email(class_="input", placeholder="Email", id="email")}}
+        <br>
+        Name:{{ form.name(class_="input", placeholder="Name", id="name")}}
+        <br>
+        Password:{{ form.password(class_="input", placeholder="Password", id="password")}}
+        <br>
         {{ form.hidden_tag() }}
       <input id="confirmPassword" class="input" type="password" align="center" placeholder="Confirm Password">
       <br>

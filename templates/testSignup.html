@@ -49,15 +49,7 @@ $( document ).ready(function() {
           <p class="sign" align="center">Create Account</p>
       {% endif %}
     <form class="form1" action="/testSignup" method="post" id="registerForm">
-        Username:{{ form.username(class_="input", placeholder="Username", id="username")}}
-        <br>
-        Email:{{ form.email(class_="input", placeholder="Email", id="email")}}
-        <br>
-        Name:{{ form.name(class_="input", placeholder="Name", id="name")}}
-        <br>
-        Password:{{ form.password(class_="input", placeholder="Password", id="password")}}
-        <br>
-        {{ form.hidden_tag() }}
+        
       <input id="confirmPassword" class="input" type="password" align="center" placeholder="Confirm Password">
       <br>
       <br>

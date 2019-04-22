@@ -1,0 +1,66 @@
+<title> About Us </title>
+        <p> About Us </p>
+        <p> WhereYouGoin is a project born out of Boston University CS411 Software Engineering Course </p>
+        <p> Use our web app to help plan your upcoming trip! </p>
+        <p> After creating an account you can specify your interests and where you would like to go and easily find recommendations for restaurants, museums and more! </p>
+      </div>
+      <div style = "display:flex">
+            <div class="figure"><img src="./images/tessa.jpg" width="200" height="150" />
+              <div class="figcaption">
+                <p class="team_name">Tessa McNeil</p>
+                <p class="team_title">Job Title Here</p>
+                <p class="team_description"> Person description goes here </p>
+              </div>
+            </div>
+            <div class="figure"><img src="./images/Coming-Soon.jpg" width="200" height="150" />
+              <div class="figcaption">
+                <p class="team_name">Name Goes Here</p>
+                <p class="team_title">Job Title Here</p>
+                <p class="team_description">Person description goes here</p>
+              </div>
+            </div>
+            <div class="figure"><img src="./images/Coming-Soon.jpg" width="200" height="150"/>
+              <div class="figcaption">
+                <p class="team_name">Name Goes Here</p>
+                <p class="team_title">Job Title Here</p>
+                <p class="team_description">Person description goes here</p>
+              </div>
+            </div>
+            <div class="figure"><img src="./images/Coming-Soon.jpg" width="200" height="150"/>
+              <div class="figcaption">
+                <p class="team_name">Name Goes Here</p>
+                <p class="team_title">Job Title Here</p>
+                <p class="team_description">Person description goes here</p>
+              </div>
+            </div>
+
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block head %}
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+  <title>Create Account</title>
+    <style>
+    .form1{
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+    </style>
+  {% endblock %}
+
+  {% block body %}
+  <div class="main" style="color:white;">
+      {% if error %}
+          <p class="error" align="center">{{ error }}</p>
+      {% else %}
+          <h2 class="sign" align="center">Create Account</h2>
+      {% endif %}
+    {% endblock %}

@@ -224,7 +224,7 @@ def save_to_cache(n, reviews):
 def load_from_cache(n):
     temp = Cache.objects(name=n).first()
     if temp:
-        return temp.all_reviews
+        return json.loads(temp.all_reviews)
     return [[],[]]
 
 #This once gets routed to from the above one, DONT ACCESS THIS DIRECTLY

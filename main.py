@@ -118,9 +118,9 @@ def landing_page():
         if e.code == 401:
             # Unauthorized - bad token
             session.pop('access_token', None)
-            return redirect(url_for('testLogin'))
+            return redirect(url_for('Login'))
         return res.read()
-    return redirect(url_for('testLogin'))
+    return redirect(url_for('Login'))
 
 
 @app.route('/Googlelogin')
@@ -139,44 +139,44 @@ def authorized(resp):
 def get_access_token():
     return session.get('access_token')
 
-@app.route("/testLogin", methods=['GET', 'POST'])
-def testLogin():
+@app.route("/Login", methods=['GET', 'POST'])
+def Login():
     form = LogInForm()
     form_Request = RequestForm()
     if request.method == 'GET':
         if current_user.is_authenticated == True:
             return redirect(url_for('requestare'))
-        return render_template('testLogin.html', form=form)
+        return render_template('Login.html', form=form)
     else:
         check_user = User.objects(username=form.username.data).first()
         if check_user:
             if check_password_hash(check_user['password'], form.password.data):
                 login_user(check_user)
                 return redirect(url_for('requestare'))
-            return render_template('testLogin.html', form=form, error="Incorrect password!",Client_id_url=config.Google_Client_ID)
-        return render_template('testLogin.html', form=form, error="Username doesn't exist!",Client_id_url=config.Google_Client_ID)
+            return render_template('Login.html', form=form, error="Incorrect password!",Client_id_url=config.Google_Client_ID)
+        return render_template('Login.html', form=form, error="Username doesn't exist!",Client_id_url=config.Google_Client_ID)
 
-@app.route("/testSignup", methods=['GET', 'POST'])
+@app.route("/Signup", methods=['GET', 'POST'])
 def signup():
     form = RegForm()
     form_Request =  RequestForm()
     if request.method == 'GET':
-        return render_template('testSignup.html', form=form)
+        return render_template('Signup.html', form=form)
     else:
         if form.validate_on_submit():
             existing_email = User.objects(email=form.email.data).first()
             existing_user = User.objects(username=form.username.data).first()
             if existing_email is not None:
-                return render_template('testSignup.html', form=form, error="Email taken")  # We should return a pop up error msg as well account taken
+                return render_template('Signup.html', form=form, error="Email taken")  # We should return a pop up error msg as well account taken
             elif existing_user is not None:
-                return render_template('testSignup.html', form=form, error="Username taken")
+                return render_template('Signup.html', form=form, error="Username taken")
             else:
                 hashpass = generate_password_hash(form.password.data, method='sha256')
                 newUser = User(username=form.username.data, name=form.name.data, email=form.email.data,
                                password=hashpass).save()
                 login_user(newUser)
-                return render_template('place_request.html',form =form_Request)
-        return render_template('testSignup.html', form=form) #We should return a pop up error msg as well bad input
+                return redirect(url_for('requestare'))
+        return render_template('Signup.html', form=form) #We should return a pop up error msg as well bad input
 
 
 #An example of a route that changes based on the input of the endpoint. Notice how '<name>' is a variable.
@@ -212,7 +212,7 @@ def requestare():
 
         return render_template('place_request.html',form =form, name=name,loggedin=status)
     else:
-        return redirect("/testLogin")
+        return redirect("/Login")
 
 def save_to_cache(n, reviews):
     for x in Cache.objects:
@@ -283,4 +283,13 @@ def logout():
         del session['access_token']
     except Exception:
         pass
-    return redirect("/testLogin")
+    return redirect("/Login")
+
+
+@app.route('/resetpassword', methods = ['GET'])
+def resetpassword():
+    return redirect("/Login")
+
+@app.route("/aboutus/", methods = ['GET','POST'])
+def aboutus():
+    return render_template('aboutus.html')

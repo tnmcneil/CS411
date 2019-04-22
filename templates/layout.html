@@ -34,14 +34,17 @@
             {% if loggedin %}
             <a class="nav-link" href="/logout">Logout</a>
            {% else %}
-           <a class="nav-link" href="/testLogin">Login</a>
+           <a class="nav-link" href="/Login">Login</a>
            {% endif %}
 
          </li>
        </ul>
      </div>
    </nav>
+   <body style="  background-size: 100%;">
+
         {% block body %}{% endblock %}
+        </body>
 </div>
 
 <!-- Footer -->

@@ -11,7 +11,6 @@ SET UP INFO:
 9. To auto update the instance once you save ,export FLASK_DEBUG=1 or windows:  $env:FLASK_DEBUG = "main.py"
 '''
 
-
 from flask import Flask , request,jsonify, redirect,render_template, url_for, session
 from APIs import Google_Places_Api, config, Yelp_API
 from flask_mongoengine import MongoEngine, Document
@@ -52,6 +51,12 @@ class User(UserMixin, db.Document):
     name = db.StringField()
     email = db.StringField(max_length=30)
     password = db.StringField()
+
+class Cache(db.Document):
+    meta = {'collection': 'cache'}
+    all_reviews = db.StringField()
+    name = db.StringField()
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -109,15 +114,12 @@ def landing_page():
     try:
         opener = URLLib_request.build_opener()
         res = opener.open(req)
-        print(res)
     except error.URLError as e:
         if e.code == 401:
             # Unauthorized - bad token
             session.pop('access_token', None)
             return redirect(url_for('testLogin'))
-        print(res.read())
         return res.read()
-    print(res.read())
     return redirect(url_for('testLogin'))
 
 
@@ -173,7 +175,6 @@ def signup():
                 newUser = User(username=form.username.data, name=form.name.data, email=form.email.data,
                                password=hashpass).save()
                 login_user(newUser)
-                print("LOGGED IN")
                 return render_template('place_request.html',form =form_Request)
         return render_template('testSignup.html', form=form) #We should return a pop up error msg as well bad input
 
@@ -199,7 +200,6 @@ def requestare():
         status = True
         toInsert = {"hit": "requestArea"}
         #response = mycol.insert_one(toInsert)
-        #print(response)
         #end example
         name = None
         try:
@@ -214,19 +214,33 @@ def requestare():
     else:
         return redirect("/testLogin")
 
+def save_to_cache(n, reviews):
+    for x in Cache.objects:
+        if(x.name == n):
+            return
+    Cache(name=n, all_reviews=json.dumps(reviews)).save()
+    return
+
+def load_from_cache(n):
+    temp = Cache.objects(name=n).first()
+    if temp:
+        return temp.all_reviews
+    return [[],[]]
+
 #This once gets routed to from the above one, DONT ACCESS THIS DIRECTLY
 @app.route("/places/", methods = ['GET','POST'])
 def place():
     data = "NO DATA"
     if request.method == 'POST':
         status = True
-        print(request.form)
         place = request.form['area']
-# <<<<<<< HEAD
         names = [[],[]]
         address = [[],[]]
         pics = [[],[]]
-        all_reviews = [[],[]]
+        all_reviews = load_from_cache(place)
+        get_reviews = True
+        if all_reviews != [[],[]]:
+            get_reviews = False
         categories = ["Restaurants", "Museums"]
         count = 0
         for i in range(len(categories)):
@@ -243,21 +257,18 @@ def place():
                     pics[i].append(["https://safekozani.gr/images/coming-soon.png",count])
                 count += 1
                 for_yelp = [x.strip() for x in d["formatted_address"].split(",")]
-                current_reviews = []
-                try:
-                    test_yelp = Yelp_API.get_reviews_of_business(d["name"], for_yelp[0], for_yelp[1],
-                                                                 for_yelp[2].split(" ")[0], "US")
-                    # print(test_yelp)
-                    for x in test_yelp["reviews"]:
-                        # print(x)
-                        current_reviews.append([x["rating"], x["text"], x["url"]])
-                except:
-                    print("no reviews")
-                all_reviews[i].append(current_reviews)
+                if get_reviews:
+                    current_reviews = []
+                    try:
+                        test_yelp = Yelp_API.get_reviews_of_business(d["name"], for_yelp[0], for_yelp[1],
+                                                                     for_yelp[2].split(" ")[0], "US")
+                        for x in test_yelp["reviews"]:
+                            current_reviews.append([x["rating"], x["text"], x["url"]])
+                    except:
+                        print("no reviews")
+                    all_reviews[i].append(current_reviews)
+        save_to_cache(place, all_reviews)
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
-        print(pics)
-        print(pics[0])
-        print(pics[0][0])
         return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics,loggedin=status, all_reviews=all_reviews)
     else:
         return redirect("/requestarea/")

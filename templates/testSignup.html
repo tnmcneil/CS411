@@ -48,23 +48,23 @@ $( document ).ready(function() {
       {% if error %}
           <p class="error" align="center">{{ error }}</p>
       {% else %}
-          <p class="sign" align="center">Create Account</p>
+          <h2 class="sign" align="center">Create Account</h2>
       {% endif %}
-    <form class="form1" action="/testSignup" method="post" id="registerForm">
-        Username:{{ form.username(class_="input", placeholder="Username", id="username")}}
+    <form class="form1" action="/testSignup" method="post" id="registerForm" style="text-align:center">
+         {{ form.username(class_="input", placeholder="Username", id="username")}}
         <br>
-        Email:{{ form.email(class_="input", placeholder="Email", id="email")}}
+            {{ form.email(class_="input", placeholder="Email", id="email")}}
         <br>
-        Name:{{ form.name(class_="input", placeholder="Name", id="name")}}
+         {{ form.name(class_="input", placeholder="Name", id="name")}}
         <br>
-        Password:{{ form.password(class_="input", placeholder="Password", id="password")}}
+         {{ form.password(class_="input", placeholder="Password", id="password")}}
         <br>
         {{ form.hidden_tag() }}
         
       <input id="confirmPassword" class="input" type="password" align="center" placeholder="Confirm Password">
       <br>
       <br>
-      <input type="submit" class="submit" align="center" value="Submit">
+      <input type="submit" class="submit FORMSUBMIT" align="center" value="Submit">
     </form>
     </div>
 

@@ -253,11 +253,7 @@ def place():
                 except:
                     print("no reviews")
                 all_reviews[i].append(current_reviews)
-        response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
-        print(pics)
-        print(pics[0])
-        print(pics[0][0])
-        return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics,loggedin=status, all_reviews=all_reviews)
+        return render_template('places.html', Categories = categories,place=place, names = names, address = address, pics = pics,loggedin=status, all_reviews=all_reviews)
     else:
         return redirect("/requestarea/")
 

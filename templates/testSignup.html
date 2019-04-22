@@ -1,3 +1,5 @@
+
+
 {% extends "layout.html" %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
@@ -33,6 +35,12 @@ $( document ).ready(function() {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
   <title>Create Account</title>
+    <style>
+    .form1{
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+    </style>
   {% endblock %}
 
   {% block body %}
@@ -40,20 +48,24 @@ $( document ).ready(function() {
       {% if error %}
           <p class="error" align="center">{{ error }}</p>
       {% else %}
-          <p class="sign" align="center">Create Account</p>
+          <h2 class="sign" align="center">Create Account</h2>
       {% endif %}
-    <form class="form1" action="/testSignup" method="post" id="registerForm">
-        {{ form.username(class_="input", placeholder="Username", id="username")}}
-        {{ form.email(class_="input", placeholder="Email", id="email")}}
-        {{ form.name(class_="input", placeholder="Name", id="name")}}
-        {{ form.password(class_="input", placeholder="Password", id="password")}}
+    <form class="form1" action="/testSignup" method="post" id="registerForm" style="text-align:center">
+         {{ form.username(class_="input", placeholder="Username", id="username")}}
+        <br>
+            {{ form.email(class_="input", placeholder="Email", id="email")}}
+        <br>
+         {{ form.name(class_="input", placeholder="Name", id="name")}}
+        <br>
+         {{ form.password(class_="input", placeholder="Password", id="password")}}
+        <br>
         {{ form.hidden_tag() }}
+        
       <input id="confirmPassword" class="input" type="password" align="center" placeholder="Confirm Password">
       <br>
       <br>
-      <input type="submit" class="submit" align="center" value="Submit">
+      <input type="submit" class="submit FORMSUBMIT" align="center" value="Submit">
     </form>
     </div>
 
     {% endblock %}
-

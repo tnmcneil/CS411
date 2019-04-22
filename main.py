@@ -234,6 +234,7 @@ def place():
     if request.method == 'POST':
         status = True
         place = request.form['area']
+<<<<<<< HEAD
         names = [[],[]]
         address = [[],[]]
         pics = [[],[]]
@@ -242,6 +243,13 @@ def place():
         if all_reviews != [[],[]]:
             get_reviews = False
         categories = ["Restaurants", "Museums"]
+=======
+        names = [[],[],[]]
+        address = [[],[],[]]
+        pics = [[],[],[]]
+        all_reviews = [[],[],[]]
+        categories = ["Restaurants", "Bars", "Museums"]
+>>>>>>> 1cc16289d76083afbd04e8efff6483de5a014fe0
         count = 0
         for i in range(len(categories)):
             data = Google_Places_Api.get_restaurants_near_place(place, categories[i])
@@ -257,6 +265,7 @@ def place():
                     pics[i].append(["https://safekozani.gr/images/coming-soon.png",count])
                 count += 1
                 for_yelp = [x.strip() for x in d["formatted_address"].split(",")]
+<<<<<<< HEAD
                 if get_reviews:
                     current_reviews = []
                     try:
@@ -270,6 +279,20 @@ def place():
         save_to_cache(place, all_reviews)
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
         return render_template('places.html', place=place, data=response, names = names, address = address, pics = pics,loggedin=status, all_reviews=all_reviews)
+=======
+                current_reviews = []
+                try:
+                    test_yelp = Yelp_API.get_reviews_of_business(d["name"], for_yelp[0], for_yelp[1],
+                                                                 for_yelp[2].split(" ")[0], "US")
+                    # print(test_yelp)
+                    for x in test_yelp["reviews"]:
+                        # print(x)
+                        current_reviews.append([x["rating"], x["text"], x["url"]])
+                except:
+                    print("no reviews")
+                all_reviews[i].append(current_reviews)
+        return render_template('places.html', Categories = categories,place=place, names = names, address = address, pics = pics,loggedin=status, all_reviews=all_reviews)
+>>>>>>> 1cc16289d76083afbd04e8efff6483de5a014fe0
     else:
         return redirect("/requestarea/")
 

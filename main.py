@@ -122,7 +122,8 @@ def landing_page():
         return res.read()
     return redirect(url_for('testLogin'))
 
-@app.route("/aboutUs")
+@app.route("/aboutUs/")
+@app.route("/aboutus/")
 def about_us_page():
     access_token = session.get('access_token')
     return render_template("aboutUs.html")

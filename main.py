@@ -122,11 +122,7 @@ def landing_page():
         return res.read()
     return redirect(url_for('Login'))
 
-@app.route("/aboutUs/")
-@app.route("/aboutus/")
-def about_us_page():
-    access_token = session.get('access_token')
-    return render_template("aboutUs.html")
+
 
 
 @app.route('/Googlelogin')
@@ -296,6 +292,9 @@ def logout():
 def resetpassword():
     return redirect("/Login")
 
-@app.route("/aboutus/", methods = ['GET','POST'])
+@app.route('/aboutus/', methods = ['GET'])
 def aboutus():
-    return render_template('aboutus.html')
+    status=False
+    if current_user.is_authenticated == True or session.get('access_token') is not None:
+        status = True
+    return render_template('aboutus.html',loggedin=status)

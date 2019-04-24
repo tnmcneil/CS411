@@ -236,21 +236,24 @@ def place():
     if request.method == 'POST':
         status = True
         place = request.form['area']
-        names = [[],[]]
-        address = [[],[]]
-        pics = [[],[]]
+        # names = [[],[],[]]
+        # address = [[],[],[]]
+        # pics = [[],[],[]]
+        categories = ["Restaurants", "Museums", "Bars", "movie_theater", "night_club", "park"]
+        names = [[]]*len(categories)
+        address = [[]]*len(categories)
+        pics = [[]]*len(categories)
         ratings = []
         all_reviews = load_from_cache(place)
         get_reviews = True
-        if all_reviews != [[],[]]:
+        if all_reviews != [[],[],[]]:
             get_reviews = False
-        categories = ["Restaurants", "Museums"]
         count = 0
         for i in range(len(categories)):
-            data = Google_Places_Api.get_restaurants_near_place(place, categories[i])
+            data = Google_Places_Api.get_activities(place, categories[i])
             data = data["results"]
             for d in data:
-                ratings.append(d['rating'])
+                # ratings.append(d['rating'])
                 names[i].append(d["name"])
                 address[i].append(d["formatted_address"])
                 if "photos" in d:
@@ -260,20 +263,24 @@ def place():
                 else:
                     pics[i].append(["https://safekozani.gr/images/coming-soon.png",count])
                 count += 1
-                for_yelp = [x.strip() for x in d["formatted_address"].split(",")]
-                if get_reviews:
-                    current_reviews = []
-                    try:
-                        test_yelp = Yelp_API.get_reviews_of_business(d["name"], for_yelp[0], for_yelp[1],
-                                                                     for_yelp[2].split(" ")[0], "US")
-                        for x in test_yelp["reviews"]:
-                            current_reviews.append([x["rating"], x["text"], x["url"]])
-                    except:
-                        print("no reviews")
-                    all_reviews[i].append(current_reviews)
-        save_to_cache(place, all_reviews)
+        #         for_yelp = [x.strip() for x in d["formatted_address"].split(",")]
+        #         if get_reviews:
+        #             current_reviews = []
+        #             try:
+        #                 test_yelp = Yelp_API.get_reviews_of_business(d["name"], for_yelp[0], for_yelp[1],
+        #                                                              for_yelp[2].split(" ")[0], "US")
+        #                 for x in test_yelp["reviews"]:
+        #                     current_reviews.append([x["rating"], x["text"], x["url"]])
+        #             except:
+        #                 print("no reviews")
+        #             all_reviews[i].append(current_reviews)
+        # save_to_cache(place, all_reviews)
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
-        return render_template('places.html',Categories=categories, place=place, names = names, address = address, pics = pics,loggedin=status, all_reviews=all_reviews,ratings = ratings)
+        # return render_template('places.html',Categories=categories, place=place, names = names, address = address,
+        #                        pics = pics,loggedin=status, all_reviews=all_reviews,ratings = ratings)
+        return render_template('places.html', Categories=categories, place=place, names=names, address=address,
+                               pics=pics, loggedin=status)
+
     else:
         return redirect("/requestarea/")
 

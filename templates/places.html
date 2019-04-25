@@ -65,9 +65,16 @@ background:black;
                   <h3>{{ names[outer_loop.index - 1][loop.index0] }}</h3>
                   <p> {{ address[outer_loop.index - 1][loop.index0] }}</p>
                 </button>
-
               </div>
-
+               <div class="modal-body" id="style-1" style="word-wrap: break-word;overflow-y: auto; max-height: calc(100vh - 210px);">
+                 <h5>Overall Rating : <i>{{ ratings[loop.index0] }}</i></h5>
+                 <hr class = "striped-border"/>
+                 {% for anothaItem in all_reviews[outer_loop.index - 1][loop.index0] %}
+                  <p style="color:black; word-wrap: break-word;"> Rating: <b>{{anothaItem[0]}}</b></p>
+                  <p style="color:black; word-wrap: break-word;"> Review: {{anothaItem[1]}}</p>
+                  <p style="color:black; word-wrap: break-word;"> <a href={{anothaItem[2]}}>Read More</a></p>
+                 {% endfor %}
+               </div>
               <!-- The Modal -->
                 <div class="modal" id="myModal{{pic[1]}}">
                   <div class="modal-dialog">
@@ -76,6 +83,7 @@ background:black;
                         <h4 class="modal-title" style="color:black;">{{ names[outer_loop.index - 1][loop.index0] }}</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                       </div>
+
                       <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                       </div>

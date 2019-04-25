@@ -122,9 +122,6 @@ def landing_page():
         return res.read()
     return redirect(url_for('Login'))
 
-
-
-
 @app.route('/Googlelogin')
 def login():
     callback=url_for('authorized', _external=True)
@@ -227,7 +224,7 @@ def load_from_cache(n):
     temp = Cache.objects(name=n).first()
     if temp:
         return json.loads(temp.all_reviews)
-    return [[],[]]
+    return [[],[],[],[],[]]
 
 #This once gets routed to from the above one, DONT ACCESS THIS DIRECTLY
 @app.route("/places/", methods = ['GET','POST'])
@@ -236,17 +233,19 @@ def place():
     if request.method == 'POST':
         status = True
         place = request.form['area']
-        # names = [[],[],[]]
-        # address = [[],[],[]]
-        # pics = [[],[],[]]
-        categories = ["Restaurants", "Museums", "Bars", "movie_theater", "night_club", "park"]
-        names = [[]]*len(categories)
-        address = [[]]*len(categories)
-        pics = [[]]*len(categories)
+        categories = ["Restaurants", "Museums", "Bars", "night_club", "park"]
+        titles = ["Restaurants:", "Museums:", "Bars:", "Night Clubs:", "Parks:"]
+        names = [[],[],[],[],[]]
+        address = [[],[],[],[],[]]
+        pics = [[],[],[],[],[]]
+        # names = [[]]*len(categories)
+        # address = [[]]*len(categories)
+        # pics = [[]]*len(categories)
         ratings = []
-        all_reviews = load_from_cache(place)
+        # all_reviews = load_from_cache(place)
+        all_reviews = [[],[],[],[],[]]
         get_reviews = True
-        if all_reviews != [[],[],[]]:
+        if all_reviews != [[],[],[],[],[]]:
             get_reviews = False
         count = 0
         for i in range(len(categories)):
@@ -263,23 +262,25 @@ def place():
                 else:
                     pics[i].append(["https://safekozani.gr/images/coming-soon.png",count])
                 count += 1
-        #         for_yelp = [x.strip() for x in d["formatted_address"].split(",")]
-        #         if get_reviews:
-        #             current_reviews = []
-        #             try:
-        #                 test_yelp = Yelp_API.get_reviews_of_business(d["name"], for_yelp[0], for_yelp[1],
-        #                                                              for_yelp[2].split(" ")[0], "US")
-        #                 for x in test_yelp["reviews"]:
-        #                     current_reviews.append([x["rating"], x["text"], x["url"]])
-        #             except:
-        #                 print("no reviews")
-        #             all_reviews[i].append(current_reviews)
+                for_yelp = [x.strip() for x in d["formatted_address"].split(",")]
+                if get_reviews:
+                    current_reviews = []
+                    try:
+                        test_yelp = Yelp_API.get_reviews_of_business(d["name"], for_yelp[0], for_yelp[1],
+                                                                     for_yelp[2].split(" ")[0], "US")
+                        for x in test_yelp["reviews"]:
+                            current_reviews.append([x["rating"], x["text"], x["url"]])
+                    except:
+                        print("no reviews")
+                    all_reviews[i].append(current_reviews)
         # save_to_cache(place, all_reviews)
+        print('++++++++++++++++++++')
+        print(all_reviews)
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
-        # return render_template('places.html',Categories=categories, place=place, names = names, address = address,
-        #                        pics = pics,loggedin=status, all_reviews=all_reviews,ratings = ratings)
-        return render_template('places.html', Categories=categories, place=place, names=names, address=address,
-                               pics=pics, loggedin=status)
+        return render_template('places.html',Categories=titles, place=place, names = names, address = address,
+                               pics = pics,loggedin=status, all_reviews=all_reviews,ratings = ratings)
+        # return render_template('places.html', Categories=titles, place=place, names=names, address=address,
+        #                        pics=pics, loggedin=status)
 
     else:
         return redirect("/requestarea/")

@@ -238,9 +238,6 @@ def place():
         names = [[],[],[],[],[]]
         address = [[],[],[],[],[]]
         pics = [[],[],[],[],[]]
-        # names = [[]]*len(categories)
-        # address = [[]]*len(categories)
-        # pics = [[]]*len(categories)
         ratings = []
         # all_reviews = load_from_cache(place)
         all_reviews = [[],[],[],[],[]]
@@ -274,14 +271,9 @@ def place():
                         print("no reviews")
                     all_reviews[i].append(current_reviews)
         # save_to_cache(place, all_reviews)
-        print('++++++++++++++++++++')
-        print(all_reviews)
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
         return render_template('places.html',Categories=titles, place=place, names = names, address = address,
                                pics = pics,loggedin=status, all_reviews=all_reviews,ratings = ratings)
-        # return render_template('places.html', Categories=titles, place=place, names=names, address=address,
-        #                        pics=pics, loggedin=status)
-
     else:
         return redirect("/requestarea/")
 

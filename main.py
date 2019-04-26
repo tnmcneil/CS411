@@ -213,18 +213,20 @@ def requestare():
     else:
         return redirect("/Login")
 
-def save_to_cache(n, reviews):
+def save_to_cache(n, reviews, c):
+    query = n + "_" + c
     for x in Cache.objects:
-        if(x.name == n):
+        if(x.name == query):
             return
-    Cache(name=n, all_reviews=json.dumps(reviews)).save()
+    Cache(name=query, all_reviews=json.dumps(reviews)).save()
     return
 
-def load_from_cache(n):
-    temp = Cache.objects(name=n).first()
+def load_from_cache(n, c):
+    query = n + "_" + c
+    temp = Cache.objects(name=query).first()
     if temp:
         return json.loads(temp.all_reviews)
-    return [[],[],[],[],[]]
+    return []
 
 #This once gets routed to from the above one, DONT ACCESS THIS DIRECTLY
 @app.route("/places/", methods = ['GET','POST'])
@@ -239,15 +241,12 @@ def place():
         address = [[],[],[],[],[]]
         pics = [[],[],[],[],[]]
         ratings = []
-        # all_reviews = load_from_cache(place)
         all_reviews = [[],[],[],[],[]]
-        get_reviews = True
-        if all_reviews != [[],[],[],[],[]]:
-            get_reviews = False
         count = 0
         for i in range(len(categories)):
             data = Google_Places_Api.get_activities(place, categories[i])
             data = data["results"]
+            temp_load = load_from_cache(place, categories[i])
             for d in data:
                 # ratings.append(d['rating'])
                 names[i].append(d["name"])
@@ -260,8 +259,8 @@ def place():
                     pics[i].append(["https://safekozani.gr/images/coming-soon.png",count])
                 count += 1
                 for_yelp = [x.strip() for x in d["formatted_address"].split(",")]
-                if get_reviews:
-                    current_reviews = []
+                current_reviews = []
+                if temp_load == []:
                     try:
                         test_yelp = Yelp_API.get_reviews_of_business(d["name"], for_yelp[0], for_yelp[1],
                                                                      for_yelp[2].split(" ")[0], "US")
@@ -270,7 +269,9 @@ def place():
                     except:
                         print("no reviews")
                     all_reviews[i].append(current_reviews)
-        # save_to_cache(place, all_reviews)
+                else:
+                    all_reviews[i] = temp_load
+            save_to_cache(place, all_reviews[i], categories[i])
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
         return render_template('places.html',Categories=titles, place=place, names = names, address = address,
                                pics = pics,loggedin=status, all_reviews=all_reviews,ratings = ratings)

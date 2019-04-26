@@ -122,9 +122,6 @@ def landing_page():
         return res.read()
     return redirect(url_for('Login'))
 
-
-
-
 @app.route('/Googlelogin')
 def login():
     callback=url_for('authorized', _external=True)
@@ -227,7 +224,7 @@ def load_from_cache(n):
     temp = Cache.objects(name=n).first()
     if temp:
         return json.loads(temp.all_reviews)
-    return [[],[]]
+    return [[],[],[],[],[]]
 
 #This once gets routed to from the above one, DONT ACCESS THIS DIRECTLY
 @app.route("/places/", methods = ['GET','POST'])
@@ -236,21 +233,23 @@ def place():
     if request.method == 'POST':
         status = True
         place = request.form['area']
-        names = [[],[]]
-        address = [[],[]]
-        pics = [[],[]]
+        categories = ["Restaurants", "Museums", "Bars", "night_club", "park"]
+        titles = ["Restaurants:", "Museums:", "Bars:", "Night Clubs:", "Parks:"]
+        names = [[],[],[],[],[]]
+        address = [[],[],[],[],[]]
+        pics = [[],[],[],[],[]]
         ratings = []
-        all_reviews = load_from_cache(place)
+        # all_reviews = load_from_cache(place)
+        all_reviews = [[],[],[],[],[]]
         get_reviews = True
-        if all_reviews != [[],[]]:
+        if all_reviews != [[],[],[],[],[]]:
             get_reviews = False
-        categories = ["Restaurants", "Museums"]
         count = 0
         for i in range(len(categories)):
-            data = Google_Places_Api.get_restaurants_near_place(place, categories[i])
+            data = Google_Places_Api.get_activities(place, categories[i])
             data = data["results"]
             for d in data:
-                ratings.append(d['rating'])
+                # ratings.append(d['rating'])
                 names[i].append(d["name"])
                 address[i].append(d["formatted_address"])
                 if "photos" in d:
@@ -271,9 +270,10 @@ def place():
                     except:
                         print("no reviews")
                     all_reviews[i].append(current_reviews)
-        save_to_cache(place, all_reviews)
+        # save_to_cache(place, all_reviews)
         response = json.dumps(data, sort_keys = True, indent = 4, separators = (',', ': '))
-        return render_template('places.html',Categories=categories, place=place, names = names, address = address, pics = pics,loggedin=status, all_reviews=all_reviews,ratings = ratings)
+        return render_template('places.html',Categories=titles, place=place, names = names, address = address,
+                               pics = pics,loggedin=status, all_reviews=all_reviews,ratings = ratings)
     else:
         return redirect("/requestarea/")
 

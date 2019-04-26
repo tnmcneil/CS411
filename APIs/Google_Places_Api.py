@@ -20,7 +20,7 @@ def get_coords(loc):
     return lat, lng
 
 
-def get_restaurants_near_place(location,typeofplace):
+def get_activities(location, type):
     gmaps = googlemaps.Client(key=APIKEY)
 
     # Geocoding an address
@@ -33,7 +33,7 @@ def get_restaurants_near_place(location,typeofplace):
 
     lat, lng = get_coords(location)
     # Request directions via public transit
-    result = gmaps.places(typeofplace,location=[lat,lng],radius=2000)
+    result = gmaps.places(type,location=[lat,lng],radius=2000)
 
     return result
 

@@ -171,7 +171,7 @@ pycurl==7.43.0.1
 PyDispatcher==2.0.5
 PyExecJS==1.5.1
 pyflakes==1.6.0
-Pygments==2.2.0
+Pygments==2.7.4
 PyHamcrest==1.9.0
 pyjsparser==2.5.2
 PyJWT==1.6.4
